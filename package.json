@@ -1,8 +1,8 @@
 {
-  "name": "react-native-calendars",
-  "version": "1.16.1",
+  "name": "react-native-calendars-with-price",
+  "version": "1.16.2",
   "main": "src/index.js",
-  "description": "React Native Calendar Components",
+  "description": "React Native Calendar Components With Price",
   "scripts": {
     "test": "jasmine src/*.spec.js && npm run lint",
     "lint": "eslint src/ example/src"

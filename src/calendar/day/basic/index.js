@@ -1,9 +1,5 @@
-import React, {Component} from 'react';
-import {
-  TouchableOpacity,
-  Text,
-  View
-} from 'react-native';
+import React, { Component } from 'react';
+import { TouchableOpacity, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 
 import styleConstructor from './style';
@@ -42,11 +38,12 @@ class Day extends Component {
     if (changed === 'marking') {
       let markingChanged = false;
       if (this.props.marking && nextProps.marking) {
-        markingChanged = (!(
-          this.props.marking.marked === nextProps.marking.marked
-          && this.props.marking.selected === nextProps.marking.selected
-          && this.props.marking.dotColor === nextProps.marking.dotColor
-          && this.props.marking.disabled === nextProps.marking.disabled));
+        markingChanged = !(
+          this.props.marking.marked === nextProps.marking.marked &&
+          this.props.marking.selected === nextProps.marking.selected &&
+          this.props.marking.dotColor === nextProps.marking.dotColor &&
+          this.props.marking.disabled === nextProps.marking.disabled
+        );
       } else {
         markingChanged = true;
       }
@@ -73,9 +70,9 @@ class Day extends Component {
     if (marking.marked) {
       dotStyle.push(this.style.visibleDot);
       if (marking.dotColor) {
-        dotStyle.push({backgroundColor: marking.dotColor});
+        dotStyle.push({ backgroundColor: marking.dotColor });
       }
-      dot = (<View style={dotStyle}/>);
+      dot = <View style={dotStyle} />;
     }
 
     if (marking.selected) {
@@ -89,16 +86,12 @@ class Day extends Component {
     }
     return (
       <TouchableOpacity
-        style={containerStyle}
+        style={{ alignItems: 'center' }}
         onPress={this.onDayPress}
-        disabled={
-          typeof marking.disabled !== 'undefined'
-            ? marking.disabled
-            : this.props.state === 'disabled'
-        }
-      >
+        disabled={typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled'}>
         <Text style={textStyle}>{String(this.props.children)}</Text>
         {dot}
+        <Text>{this.props.price.toString().substring(0, 3)}</Text>
       </TouchableOpacity>
     );
   }

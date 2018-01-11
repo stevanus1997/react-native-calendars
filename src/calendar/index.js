@@ -1,13 +1,10 @@
-import React, {Component} from 'react';
-import {
-  View,
-  ViewPropTypes
-} from 'react-native';
+import React, { Component } from 'react';
+import { View, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 
 import XDate from 'xdate';
 import dateutils from '../dateutils';
-import {xdateToData, parseDate} from '../interface';
+import { xdateToData, parseDate } from '../interface';
 import styleConstructor from './style';
 import Day from './day/basic';
 import UnitDay from './day/period';
@@ -26,6 +23,8 @@ class Calendar extends Component {
     theme: PropTypes.object,
     // Collection of dates that have to be marked. Default = {}
     markedDates: PropTypes.object,
+
+    dateHavePrice: PropTypes.any,
 
     // Specify style for calendar container element. Default = {}
     style: viewPropTypes.style,
@@ -67,7 +66,7 @@ class Calendar extends Component {
     // Disable days by default. Default = false
     disabledByDefault: PropTypes.bool,
     // Show week numbers. Default = false
-    showWeekNumbers: PropTypes.bool,
+    showWeekNumbers: PropTypes.bool
   };
 
   constructor(props) {
@@ -90,7 +89,7 @@ class Calendar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const current= parseDate(nextProps.current);
+    const current = parseDate(nextProps.current);
     if (current && current.toString('yyyy MM') !== this.state.currentMonth.toString('yyyy MM')) {
       this.setState({
         currentMonth: current.clone()
@@ -102,19 +101,22 @@ class Calendar extends Component {
     if (day.toString('yyyy MM') === this.state.currentMonth.toString('yyyy MM')) {
       return;
     }
-    this.setState({
-      currentMonth: day.clone()
-    }, () => {
-      if (!doNotTriggerListeners) {
-        const currMont = this.state.currentMonth.clone();
-        if (this.props.onMonthChange) {
-          this.props.onMonthChange(xdateToData(currMont));
-        }
-        if (this.props.onVisibleMonthsChange) {
-          this.props.onVisibleMonthsChange([xdateToData(currMont)]);
+    this.setState(
+      {
+        currentMonth: day.clone()
+      },
+      () => {
+        if (!doNotTriggerListeners) {
+          const currMont = this.state.currentMonth.clone();
+          if (this.props.onMonthChange) {
+            this.props.onMonthChange(xdateToData(currMont));
+          }
+          if (this.props.onVisibleMonthsChange) {
+            this.props.onVisibleMonthsChange([xdateToData(currMont)]);
+          }
         }
       }
-    });
+    );
   }
 
   pressDay(date) {
@@ -152,22 +154,22 @@ class Calendar extends Component {
     let dayComp;
     if (!dateutils.sameMonth(day, this.state.currentMonth) && this.props.hideExtraDays) {
       if (this.props.markingType === 'period') {
-        dayComp = (<View key={id} style={{flex: 1}}/>);
+        dayComp = <View key={id} style={{ flex: 1 }} />;
       } else {
-        dayComp = (<View key={id} style={{width: 32}}/>);
+        dayComp = <View key={id} style={{ width: 32 }} />;
       }
     } else {
       const DayComp = this.getDayComponent();
       const date = day.getDate();
+      let price = '';
+      const allDate = day.getDate() + this.state.currentMonth.toString(this.props.monthFormat ? this.props.monthFormat : 'MMyyyy');
+      Object.keys(this.props.dateHavePrice).map(key => {
+        if (key == allDate) {
+          price = this.props.dateHavePrice[key];
+        }
+      });
       dayComp = (
-        <DayComp
-          key={id}
-          state={state}
-          theme={this.props.theme}
-          onPress={this.pressDay}
-          date={xdateToData(day)}
-          marking={this.getDateMarking(day)}
-        >
+        <DayComp key={id} state={state} theme={this.props.theme} onPress={this.pressDay} date={xdateToData(day)} marking={this.getDateMarking(day)} price={price}>
           {date}
         </DayComp>
       );
@@ -181,12 +183,12 @@ class Calendar extends Component {
     }
 
     switch (this.props.markingType) {
-    case 'period':
-      return UnitDay;
-    case 'multi-dot':
-      return MultiDotDay;
-    default:
-      return Day;
+      case 'period':
+        return UnitDay;
+      case 'multi-dot':
+        return MultiDotDay;
+      default:
+        return Day;
     }
   }
 
@@ -202,8 +204,12 @@ class Calendar extends Component {
     }
   }
 
-  renderWeekNumber (weekNumber) {
-    return <Day key={`week-${weekNumber}`} theme={this.props.theme} state='disabled'>{weekNumber}</Day>;
+  renderWeekNumber(weekNumber) {
+    return (
+      <Day key={`week-${weekNumber}`} theme={this.props.theme} state="disabled">
+        {weekNumber}
+      </Day>
+    );
   }
 
   renderWeek(days, id) {
@@ -216,7 +222,11 @@ class Calendar extends Component {
       week.unshift(this.renderWeekNumber(days[days.length - 1].getWeek()));
     }
 
-    return (<View style={this.style.week} key={id}>{week}</View>);
+    return (
+      <View style={this.style.week} key={id}>
+        {week}
+      </View>
+    );
   }
 
   render() {
@@ -228,9 +238,13 @@ class Calendar extends Component {
     let indicator;
     const current = parseDate(this.props.current);
     if (current) {
-      const lastMonthOfDay = current.clone().addMonths(1, true).setDate(1).addDays(-1).toString('yyyy-MM-dd');
-      if (this.props.displayLoadingIndicator &&
-          !(this.props.markedDates && this.props.markedDates[lastMonthOfDay])) {
+      const lastMonthOfDay = current
+        .clone()
+        .addMonths(1, true)
+        .setDate(1)
+        .addDays(-1)
+        .toString('yyyy-MM-dd');
+      if (this.props.displayLoadingIndicator && !(this.props.markedDates && this.props.markedDates[lastMonthOfDay])) {
         indicator = true;
       }
     }
@@ -249,7 +263,8 @@ class Calendar extends Component {
           weekNumbers={this.props.showWeekNumbers}
         />
         {weeks}
-      </View>);
+      </View>
+    );
   }
 }
 
