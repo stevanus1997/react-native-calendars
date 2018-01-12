@@ -10,15 +10,19 @@ export default function getStyle(theme={}) {
       paddingLeft: 5,
       paddingRight: 5,
       flex: 1,
+      flexDirection:"column",
       backgroundColor: appStyle.calendarBackground
     },
+
     week: {
       marginTop: 7,
       marginBottom: 7,
       flexDirection: 'row',
-      justifyContent: 'space-around'
+    },
+
+    day:{
+      flex:1,
     },
     ...(theme[STYLESHEET_ID] || {})
   });
 }
-
