@@ -14,8 +14,8 @@ class Day extends Component {
     marking: PropTypes.any,
     onPress: PropTypes.func,
     date: PropTypes.object,
-    containerPriceStyle: PropTypes.object,
-    textPriceStyle: PropTypes.object
+    containerPriceStyle: PropTypes.any,
+    textPriceStyle: PropTypes.any
   };
 
   constructor(props) {
