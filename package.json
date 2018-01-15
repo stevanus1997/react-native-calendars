@@ -1,6 +1,6 @@
 {
   "name": "react-native-calendars-with-price",
-  "version": "1.16.3",
+  "version": "1.16.4",
   "main": "src/index.js",
   "description": "React Native Calendar Components With Price",
   "scripts": {
