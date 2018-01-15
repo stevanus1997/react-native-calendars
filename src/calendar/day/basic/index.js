@@ -13,7 +13,9 @@ class Day extends Component {
     theme: PropTypes.object,
     marking: PropTypes.any,
     onPress: PropTypes.func,
-    date: PropTypes.object
+    date: PropTypes.object,
+    containerPriceStyle: propTypes.object,
+    textPriceStyle: propTypes.object
   };
 
   constructor(props) {
@@ -86,12 +88,12 @@ class Day extends Component {
     }
     return (
       <TouchableOpacity
-        style={{ alignItems: 'center' }}
+        style={[{ alignItems: 'center' }, this.props.containerPriceStyle == null ? {} : this.props.containerPriceStyle]}
         onPress={this.onDayPress}
         disabled={typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled'}>
         <Text style={textStyle}>{String(this.props.children)}</Text>
         {dot}
-        <Text>{this.props.price.toString().substring(0, 3)}</Text>
+        <Text style={this.props.textPriceStyle == null ? {} : this.props.textPriceStyle}>{this.props.price.toString().substring(0, 3)}</Text>
       </TouchableOpacity>
     );
   }

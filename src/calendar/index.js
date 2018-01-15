@@ -66,7 +66,9 @@ class Calendar extends Component {
     // Disable days by default. Default = false
     disabledByDefault: PropTypes.bool,
     // Show week numbers. Default = false
-    showWeekNumbers: PropTypes.bool
+    showWeekNumbers: PropTypes.bool,
+    containerPriceStyle: PropTypes.obj,
+    textPriceStyle: propTypes.obj
   };
 
   constructor(props) {
@@ -172,7 +174,16 @@ class Calendar extends Component {
       }
       dayComp = (
         <View key={id} style={this.style.day}>
-          <DayComp key={id} state={state} theme={this.props.theme} onPress={this.pressDay} date={xdateToData(day)} marking={this.getDateMarking(day)} price={price}>
+          <DayComp
+            key={id}
+            state={state}
+            theme={this.props.theme}
+            onPress={this.pressDay}
+            date={xdateToData(day)}
+            marking={this.getDateMarking(day)}
+            price={price}
+            containerPriceStyle={this.props.containerPriceStyle}
+            textPriceStyle={this.props.textPriceStyle}>
             {date}
           </DayComp>
         </View>
