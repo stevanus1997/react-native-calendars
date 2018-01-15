@@ -68,7 +68,7 @@ class Calendar extends Component {
     // Show week numbers. Default = false
     showWeekNumbers: PropTypes.bool,
     containerPriceStyle: PropTypes.obj,
-    textPriceStyle: propTypes.obj
+    textPriceStyle: PropTypes.obj
   };
 
   constructor(props) {
