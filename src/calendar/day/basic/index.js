@@ -91,9 +91,13 @@ class Day extends Component {
         style={[{ alignItems: 'center' }, this.props.containerPriceStyle == null ? {} : this.props.containerPriceStyle]}
         onPress={this.onDayPress}
         disabled={typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled'}>
-        <Text style={textStyle}>{String(this.props.children)}</Text>
-        {dot}
-        <Text style={this.props.textPriceStyle == null ? {} : this.props.textPriceStyle}>{this.props.price.toString().substring(0, 3)}</Text>
+        <View style={containerStyle}>
+          <Text style={textStyle}>{String(this.props.children)}</Text>
+          {dot}
+        </View>
+        <View>
+          <Text style={this.props.textPriceStyle == null ? {} : this.props.textPriceStyle}>{this.props.price.toString().slice(0, -3)}</Text>
+        </View>
       </TouchableOpacity>
     );
   }

@@ -164,7 +164,8 @@ class Calendar extends Component {
       const DayComp = this.getDayComponent();
       const date = day.getDate();
       let price = '';
-      const allDate = day.getDate() + this.state.currentMonth.toString(this.props.monthFormat ? this.props.monthFormat : 'MMyyyy');
+      const tempday = day.getDate() <= 9 ? '0' + day.getDate() : day.getDate();
+      const allDate = tempday + this.state.currentMonth.toString(this.props.monthFormat ? this.props.monthFormat : 'MMyyyy');
       if (this.props.dateHavePrice != null) {
         Object.keys(this.props.dateHavePrice).map(key => {
           if (key == allDate) {
