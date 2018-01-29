@@ -174,20 +174,21 @@ class Calendar extends Component {
         });
       }
       dayComp = (
-        <View key={id} style={this.style.day}>
-          <DayComp
-            key={id}
-            state={state}
-            theme={this.props.theme}
-            onPress={this.pressDay}
-            date={xdateToData(day)}
-            marking={this.getDateMarking(day)}
-            price={price}
-            containerPriceStyle={this.props.containerPriceStyle}
-            textPriceStyle={this.props.textPriceStyle}>
-            {date}
-          </DayComp>
-        </View>
+        // <View key={id} style={this.style.day}>
+        <DayComp
+          key={id}
+          state={state}
+          theme={this.props.theme}
+          onPress={this.pressDay}
+          date={xdateToData(day)}
+          marking={this.getDateMarking(day)}
+          price={price}
+          containerPriceStyle={this.props.containerPriceStyle}
+          textPriceStyle={this.props.textPriceStyle}
+        >
+          {date}
+        </DayComp>
+        // </View>
       );
     }
     return dayComp;
