@@ -163,16 +163,14 @@ class Calendar extends Component {
     } else {
       const DayComp = this.getDayComponent();
       const date = day.getDate();
-      let price = '';
+      let price = '-';
       const tempday = day.getDate() <= 9 ? '0' + day.getDate() : day.getDate();
       const allDate = tempday + this.state.currentMonth.toString(this.props.monthFormat ? this.props.monthFormat : 'MMyyyy');
-      if (this.props.dateHavePrice != null) {
-        Object.keys(this.props.dateHavePrice).map(key => {
-          if (key == allDate) {
-            price = this.props.dateHavePrice[key];
-          }
-        });
+
+      if (this.props.dateHavePrice[allDate]) {
+        price = this.props.dateHavePrice[allDate];
       }
+
       dayComp = (
         // <View key={id} style={this.style.day}>
         <DayComp

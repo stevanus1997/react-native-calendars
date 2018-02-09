@@ -33,21 +33,21 @@ class Day extends Component {
     this.props.onPress(this.props.date);
   }
 
-  shouldComponentUpdate(nextProps) {
-    const newMarkingStyle = this.getDrawingStyle(nextProps.marking);
-
-    if (JSON.stringify(this.markingStyle) !== JSON.stringify(newMarkingStyle)) {
-      this.markingStyle = newMarkingStyle;
-      return true;
-    }
-
-    return ['state', 'children'].reduce((prev, next) => {
-      if (prev || nextProps[next] !== this.props[next]) {
-        return true;
-      }
-      return prev;
-    }, false);
-  }
+  // shouldComponentUpdate(nextProps) {
+  //   const newMarkingStyle = this.getDrawingStyle(nextProps.marking);
+  //
+  //   if (JSON.stringify(this.markingStyle) !== JSON.stringify(newMarkingStyle)) {
+  //     this.markingStyle = newMarkingStyle;
+  //     return true;
+  //   }
+  //
+  //   return ['state', 'children'].reduce((prev, next) => {
+  //     if (prev || nextProps[next] !== this.props[next]) {
+  //       return true;
+  //     }
+  //     return prev;
+  //   }, false);
+  // }
 
   getDrawingStyle(marking) {
     const defaultStyle = { textStyle: {} };
@@ -113,6 +113,7 @@ class Day extends Component {
     let rightFillerStyle = {};
     let fillerStyle = {};
     let fillers;
+    this.markingStyle = this.getDrawingStyle(this.props.marking);
 
     if (this.props.state === 'disabled') {
       textStyle.push(this.style.disabledText);
