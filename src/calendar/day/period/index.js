@@ -18,7 +18,9 @@ class Day extends Component {
     onPress: PropTypes.func,
     date: PropTypes.object,
 
-    markingExists: PropTypes.bool
+    markingExists: PropTypes.bool,
+    showPrice: PropTypes.bool,
+    disabled: PropTypes.bool
   };
 
   constructor(props) {
@@ -30,7 +32,9 @@ class Day extends Component {
   }
 
   onDayPress() {
-    this.props.onPress(this.props.date);
+    if (!this.props.disabled) {
+      this.props.onPress(this.props.date);
+    }
   }
 
   // shouldComponentUpdate(nextProps) {
@@ -107,6 +111,7 @@ class Day extends Component {
   }
 
   render() {
+    // console.log('price', this.props.price, this.props.children);
     const containerStyle = [this.style.base];
     const textStyle = [this.style.text];
     let leftFillerStyle = {};
@@ -190,13 +195,17 @@ class Day extends Component {
         <View style={this.style.wrapper}>
           {fillers}
           <View style={containerStyle}>
-            <Text style={textStyle}>{String(this.props.children)}</Text>
+            <Text style={[textStyle, this.props.disabled ? { color: 'grey' } : { color: 'black' }]}>{String(this.props.children)}</Text>
           </View>
-          <View>
+          {this.props.showPrice ? (
             <View>
-              <Text style={this.props.textPriceStyle == null ? {} : this.props.textPriceStyle}>{this.props.price.toString().slice(0, -3)}</Text>
+              <View>
+                <Text style={this.props.textPriceStyle == null ? {} : this.props.textPriceStyle}>{this.props.price}</Text>
+              </View>
             </View>
-          </View>
+          ) : (
+            false
+          )}
         </View>
       </TouchableWithoutFeedback>
     );

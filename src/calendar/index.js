@@ -68,7 +68,8 @@ class Calendar extends Component {
     // Show week numbers. Default = false
     showWeekNumbers: PropTypes.bool,
     containerPriceStyle: PropTypes.any,
-    textPriceStyle: PropTypes.any
+    textPriceStyle: PropTypes.any,
+    showPrice: PropTypes.bool
   };
 
   constructor(props) {
@@ -165,14 +166,18 @@ class Calendar extends Component {
       const date = day.getDate();
       let price = '-';
       const tempday = day.getDate() <= 9 ? '0' + day.getDate() : day.getDate();
-      const allDate = tempday + this.state.currentMonth.toString(this.props.monthFormat ? this.props.monthFormat : 'MMyyyy');
+      const tempmonth = day.getMonth() + 1 <= 9 ? '0' + (day.getMonth() + 1) : day.getMonth() + 1;
+      const tempyear = day.getFullYear();
+      const allDate = tempday + '' + tempmonth + '' + tempyear;
+
+      const tempdate = tempyear + '-' + tempmonth + '-' + tempday;
 
       if (this.props.dateHavePrice[allDate]) {
         price = this.props.dateHavePrice[allDate];
       }
 
+      const disabled = new Date(tempdate) < new Date() ? true : false;
       dayComp = (
-        // <View key={id} style={this.style.day}>
         <DayComp
           key={id}
           state={state}
@@ -183,10 +188,11 @@ class Calendar extends Component {
           price={price}
           containerPriceStyle={this.props.containerPriceStyle}
           textPriceStyle={this.props.textPriceStyle}
+          showPrice={this.props.showPrice}
+          disabled={disabled}
         >
           {date}
         </DayComp>
-        // </View>
       );
     }
     return dayComp;
