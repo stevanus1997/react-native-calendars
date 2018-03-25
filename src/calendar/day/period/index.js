@@ -195,7 +195,7 @@ class Day extends Component {
         <View style={this.style.wrapper}>
           {fillers}
           <View style={containerStyle}>
-            <Text style={[textStyle, this.props.disabled ? { color: 'grey' } : { color: 'black' }]}>{String(this.props.children)}</Text>
+            <Text style={[textStyle, this.props.disabled ? { color: 'grey' } : {}]}>{String(this.props.children)}</Text>
           </View>
           {this.props.showPrice ? (
             <View>
