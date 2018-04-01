@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ViewPropTypes } from 'react-native';
+import { View, ViewPropTypes, Text } from 'react-native';
 import PropTypes from 'prop-types';
 
 import XDate from 'xdate';
@@ -69,7 +69,8 @@ class Calendar extends Component {
     showWeekNumbers: PropTypes.bool,
     containerPriceStyle: PropTypes.any,
     textPriceStyle: PropTypes.any,
-    showPrice: PropTypes.bool
+    showPrice: PropTypes.bool,
+    holiday: PropTypes.object
   };
 
   constructor(props) {
@@ -171,12 +172,33 @@ class Calendar extends Component {
       const allDate = tempday + '' + tempmonth + '' + tempyear;
 
       const tempdate = tempyear + '-' + tempmonth + '-' + tempday;
+      const tempdateholiday = tempmonth + '/' + tempday + '/' + tempyear;
+
+      let isHoliday = false;
 
       if (this.props.dateHavePrice[allDate]) {
         price = this.props.dateHavePrice[allDate];
       }
 
-      const disabled = new Date(tempdate) < new Date() ? true : false;
+      if (this.props.holiday != null) {
+        Object.keys(this.props.holiday).map((val, key) => {
+          if (val.substr(0, 2) == this.state.currentMonth.toString('MM')) {
+            if (val == tempdateholiday) {
+              isHoliday = true;
+            }
+          }
+        });
+        // if (this.props.holiday[tempdateholiday]  ) {
+        //   console.log(tempdateholiday, this.props.holiday[tempdateholiday]);
+        // }
+      }
+
+      let disabled = new Date(tempdate) < new Date();
+
+      if (disabled) {
+        disabled = new Date(tempdate) == new Date();
+      }
+
       dayComp = (
         <DayComp
           key={id}
@@ -190,6 +212,7 @@ class Calendar extends Component {
           textPriceStyle={this.props.textPriceStyle}
           showPrice={this.props.showPrice}
           disabled={disabled}
+          isHoliday={isHoliday}
         >
           {date}
         </DayComp>
@@ -250,6 +273,25 @@ class Calendar extends Component {
     );
   }
 
+  renderHoliday(currentMonth) {
+    const month = currentMonth.getMonth() + 1 <= 9 ? '0' + (currentMonth.getMonth() + 1) : currentMonth.getMonth() + 1;
+    const text = [];
+    if (this.props.holiday != null) {
+      Object.keys(this.props.holiday).map((val, key) => {
+        if (val.substr(0, 2) == month && val.substr(6, 4) == currentMonth.getFullYear()) {
+          text.push(
+            <View key={key} style={{ flexDirection: 'row', padding: 3 }}>
+              <Text style={{ color: 'red' }}>{`${val.substr(3, 2)} : `}</Text>
+              <Text> {`${this.props.holiday[val]}`} </Text>
+            </View>
+          );
+        }
+      });
+    }
+
+    return <View style={{ marginLeft: 10, marginTop: 10, borderTopWidth: 1, borderColor: 'black' }}>{text}</View>;
+  }
+
   render() {
     const days = dateutils.page(this.state.currentMonth, this.props.firstDay);
     const weeks = [];
@@ -284,6 +326,7 @@ class Calendar extends Component {
           weekNumbers={this.props.showWeekNumbers}
         />
         {weeks}
+        {this.renderHoliday(this.state.currentMonth)}
       </View>
     );
   }

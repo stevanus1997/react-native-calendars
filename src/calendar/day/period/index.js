@@ -20,7 +20,8 @@ class Day extends Component {
 
     markingExists: PropTypes.bool,
     showPrice: PropTypes.bool,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    holiday: PropTypes.bool
   };
 
   constructor(props) {
@@ -32,6 +33,7 @@ class Day extends Component {
   }
 
   onDayPress() {
+    console.log('disable', this.props.disabled);
     if (!this.props.disabled) {
       this.props.onPress(this.props.date);
     }
@@ -126,6 +128,8 @@ class Day extends Component {
       textStyle.push(this.style.todayText);
     }
 
+    console.log('props state', this.props.marking, String(this.props.children));
+
     if (this.props.marking) {
       containerStyle.push({
         borderRadius: 17
@@ -189,13 +193,14 @@ class Day extends Component {
         </View>
       );
     }
-
     return (
       <TouchableWithoutFeedback onPress={this.onDayPress}>
         <View style={this.style.wrapper}>
           {fillers}
           <View style={containerStyle}>
-            <Text style={[textStyle, this.props.disabled ? { color: 'grey' } : {}]}>{String(this.props.children)}</Text>
+            <Text style={[textStyle, (this.props.disabled ? { color: 'grey' } : this.props.isHoliday && this.props.marking.length == 0 ? { color: 'red' } : {}: {})]}>
+              {String(this.props.children)}
+            </Text>
           </View>
           {this.props.showPrice ? (
             <View>
