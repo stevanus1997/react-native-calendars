@@ -33,7 +33,7 @@ class Day extends Component {
   }
 
   onDayPress() {
-    console.log('disable', this.props.disabled);
+    // console.log('disable', this.props.disabled);
     if (!this.props.disabled) {
       this.props.onPress(this.props.date);
     }
@@ -113,7 +113,6 @@ class Day extends Component {
   }
 
   render() {
-    // console.log('price', this.props.price, this.props.children);
     const containerStyle = [this.style.base];
     const textStyle = [this.style.text];
     let leftFillerStyle = {};
@@ -127,8 +126,6 @@ class Day extends Component {
     } else if (this.props.state === 'today') {
       textStyle.push(this.style.todayText);
     }
-
-    console.log('props state', this.props.marking, String(this.props.children));
 
     if (this.props.marking) {
       containerStyle.push({
@@ -193,6 +190,9 @@ class Day extends Component {
         </View>
       );
     }
+
+    // console.log(this.props.disabled, this.props.isHoliday, String(this.props.children), this.props.isHoliday, this.props.marking);
+
     return (
       <TouchableWithoutFeedback onPress={this.onDayPress}>
         <View style={this.style.wrapper}>

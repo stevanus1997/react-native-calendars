@@ -83,13 +83,32 @@ class Calendar extends Component {
       currentMonth = XDate();
     }
     this.state = {
-      currentMonth
+      currentMonth,
+      holiday: null
     };
 
     this.updateMonth = this.updateMonth.bind(this);
     this.addMonth = this.addMonth.bind(this);
     this.pressDay = this.pressDay.bind(this);
     this.shouldComponentUpdate = shouldComponentUpdate;
+  }
+
+  componentDidMount() {
+    let a = new FormData();
+    a.append('tt', 1);
+    a.append('from', 'CGKHLP');
+    a.append('to', 'DPS');
+    a.append('curr', 'IDR');
+    a.append('isAgent', false);
+    a.append('country', 'id');
+    fetch('https://m.airpaz.com/spa/r/fcal.php', {
+      method: 'POST',
+      body: a
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState({ holiday: responseJson.holiday });
+      });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -180,23 +199,25 @@ class Calendar extends Component {
         price = this.props.dateHavePrice[allDate];
       }
 
-      if (this.props.holiday != null) {
-        Object.keys(this.props.holiday).map((val, key) => {
+      if (this.state.holiday != null) {
+        Object.keys(this.state.holiday).map((val, key) => {
           if (val.substr(0, 2) == this.state.currentMonth.toString('MM')) {
             if (val == tempdateholiday) {
               isHoliday = true;
             }
           }
         });
-        // if (this.props.holiday[tempdateholiday]  ) {
-        //   console.log(tempdateholiday, this.props.holiday[tempdateholiday]);
-        // }
       }
 
       let disabled = new Date(tempdate) < new Date();
 
       if (disabled) {
-        disabled = new Date(tempdate) == new Date();
+        let a = new Date(tempdate);
+        let b = new Date();
+
+        if (a.getDate() == b.getDate() && a.getMonth() == b.getMonth() && a.getFullYear() == b.getFullYear()) {
+          disabled = false;
+        }
       }
 
       dayComp = (
@@ -276,20 +297,25 @@ class Calendar extends Component {
   renderHoliday(currentMonth) {
     const month = currentMonth.getMonth() + 1 <= 9 ? '0' + (currentMonth.getMonth() + 1) : currentMonth.getMonth() + 1;
     const text = [];
-    if (this.props.holiday != null) {
-      Object.keys(this.props.holiday).map((val, key) => {
+    let isShow = false;
+    if (this.state.holiday != null) {
+      Object.keys(this.state.holiday).map((val, key) => {
         if (val.substr(0, 2) == month && val.substr(6, 4) == currentMonth.getFullYear()) {
+          isShow = true;
           text.push(
             <View key={key} style={{ flexDirection: 'row', padding: 3 }}>
               <Text style={{ color: 'red' }}>{`${val.substr(3, 2)} : `}</Text>
-              <Text> {`${this.props.holiday[val]}`} </Text>
+              <Text> {`${this.state.holiday[val]}`} </Text>
             </View>
           );
         }
       });
     }
+    if (isShow) {
+      return <View style={{ padding: 5, backgroundColor: '#FAFAFA', borderBottomWidth: 1, borderBottomColor: '#DDD', borderTopWidth: 1, borderTopColor: '#DDD' }}>{text}</View>;
+    }
 
-    return <View style={{ marginLeft: 10, marginTop: 10, borderTopWidth: 1, borderColor: 'black' }}>{text}</View>;
+    return <View />;
   }
 
   render() {
